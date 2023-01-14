@@ -1,0 +1,25 @@
+% test... i forgor 💀
+\documentclass{article}
+
+\usepackage{../../hmk}
+
+\begin{document}
+\newhighlight\hli[cyan!40]{surround=2ex}
+Test 1: \verb|color=cyan!40|, \verb|surround=2ex|.
+
+This is \hli{text mode} and
+\[
+  e^{ix} = \hli{\cos(x)} + i\, \hli{\sin(x)}
+\]
+is math mode.
+
+\newAhighlight\hlii[blue!25]{surround=0.5in}
+Test 2: \verb|color=blue!25|, \verb|surround=0.5in|.
+
+% Something actually from my physics homework
+\begin{align*}
+  \frac{1}{2} mv^2 &= -mg\, (h_1 - h_0), \\
+  \hlii{v &= \sqrt{-2g\, (-45.0\, \mathrm{m})}
+    \approx 29.7\, \mathrm{m/s}.}
+\end{align*}
+\end{document}

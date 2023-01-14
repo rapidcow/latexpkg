@@ -1,0 +1,39 @@
+% testing \Ahl
+\documentclass{article}
+
+\def\argopen{\mathopen{}\left}
+\def\argclose{\mathclose{}\right}
+
+\usepackage{../../hmk}
+
+\begin{document}
+
+Test 1: (\verb+hlsurround=4ex+)
+\begingroup \hlsetup{surround=4ex}
+\begin{align*}
+  \frac{\tan(x)}{\sec(x)}
+    &= \cos\argopen(\frac{\pi}{2}\argclose)
+    \cos(x) + \sin\argopen(\frac{\pi}{2}\argclose) \sin(x), \\
+  \Ahl{\sin(x) &= \cos\argopen(\frac{\pi}{2} - x\argclose).}
+\end{align*} \endgroup
+
+Test 2:
+\def\bigstick{\smash{\vrule width 0.2pt height 1.2in depth 0pt}}
+\begin{align*}
+  \Ahl{\int_a^x f(t)\, \mathrm{d}t}
+    & \Ahl{\frac{\mathrm{d}}{\mathrm{d}x} F(x)} \\
+  \Ahl{\frac{\mathrm{d}}{\mathrm{d}x}\, \int_a^x f(t)\, \mathrm{d}t &= f(x).}
+    & \Ahl{\int_a^b f(x)\, \mathrm{d}x &= F(b) - F(a).} \\
+  \bigstick & \bigstick & \bigstick & \bigstick \\
+\end{align*}
+
+Test 3:
+\begin{align*}
+  \Ahl{\sum_{n = 1}^\infty \frac{1}{n^2}} \\
+  \Ahl{\sum_{n = 1}^\infty \frac{1}{n^2} &= \zeta(2)} \\
+  % The third one should be dropped.
+  \Ahl{\sum_{n = 1}^\infty \frac{1}{n^2} &= \zeta(2) &= \frac{\pi}{6}}
+\end{align*}
+
+\end{document}
+

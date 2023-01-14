@@ -1,0 +1,18 @@
+% test package options
+\documentclass{article}
+% Should load `amsmath'
+\usepackage[hlsurround=1ex,hlbelowmargin=15pt]{../../hmk}
+\hlsetup{surround=0pt}
+
+\newhighlight\phl[pink]{surround=0pt}
+
+\begin{document}
+Test 1:
+\[ \hlsetup{belowmargin=0pt}
+  \zeta(s) = \hl{\sum_{n = 1}^\infty \frac{1}{n^s}}
+    = \phl{\prod_{\text{$p$ prime}} \frac{1}{1 - \frac{1}{p^s}}}, 
+    \qquad\text{for $\Re(s) > 1$.}
+\]
+
+Test 2 is \hl{highlighted}. \par But does it have any margin?
+\end{document}

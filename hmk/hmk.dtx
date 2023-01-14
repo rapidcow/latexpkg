@@ -1,0 +1,1125 @@
+% \iffalse meta-comment
+%
+% i am @rapidcow and i wrote this in 2020 :D
+%
+% \fi
+%
+% \iffalse
+%<driver|package>\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+%<*driver>
+\ProvidesFile{hmk.dtx}
+\documentclass{ltxdoc}
+% \usepackage[a4paper]{geometry}
+\usepackage[svgnames]{xcolor}
+\usepackage[hlsurround=0.33ex]{hmk}
+^^A We will need fancyvrb one day... one day......
+^^A But again I'm too lazy to check for that!
+\usepackage{siunitx}
+\usepackage{array,booktabs,longtable}
+\usepackage[colorlinks,linkcolor=blue]{hyperref}
+\usepackage{microtype}
+
+% We don't define a command for macros because we can just use `\cs'
+% provided by `ltxdoc.cls'.
+\newcommand*{\Package}[1]{\textsf{#1}}
+\newcommand*{\Class}[1]{\textsf{#1}}
+\newcommand*{\Environ}[1]{\texttt{#1}}
+\newcommand*{\Option}[1]{\textsf{#1}}
+
+% Nothing fancy for now
+\newenvironment{macrosynt}{\quote}{\endquote}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+% Uncomment this to hide um implementation
+% \OnlyDescription
+\begin{document}
+  \DocInput{hmk.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+%<*package>
+\ProvidesFile{hmk.sty}[2021/06/09 v0.3b Homework and stuff]
+%</package>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \GetFileInfo{hmk.sty}
+%
+% ^^A Initially stolen from `xcolor.dtx'
+% \DoNotIndex{\def,\gdef,\edef,\xdef,\long,\let,\futurelet}
+% \DoNotIndex{\ifnum,\ifdim,\iftrue,\iffalse,\ifx,\ifcase,\else,\or,\fi}
+% \DoNotIndex{\ifhmode,\ifvmode,\ifmmode,\ifinner}
+% \DoNotIndex{\bgroup,\egroup,\begingroup,\endgroup,\begin,\end}
+% \DoNotIndex{\relax,\endinput}
+% \DoNotIndex{\csname,\endcsname,\string,\the,\noexpand,\expandafter,\protect}
+% \DoNotIndex{\advance,\count,\dimen}
+% \DoNotIndex{\m@ne,\z@,\@ne,\tw@,\p@,\@@tmp}
+% \DoNotIndex{\kern,\hskip,\hspace}
+% \DoNotIndex{\hbox,\vbox,\dp,\ht,\wd}
+% \DoNotIndex{\romannumeral,\alph,\Alph,\roman,\Roman}
+% \DoNotIndex{\savebox,\setbox,\usebox,\toks}
+% \DoNotIndex{\@tempdima,\@tempdimb,\@tempdimc}
+% \DoNotIndex{\DeclareDocumentCommand,\NewDocumentCommand,
+%             \ProvideDocumentCommand,\RenewDocumentCommand}
+% \DoNotIndex{\newcommand,\renewcommand,\providecommand}
+% \DoNotIndex{\IfNoValueTF,\IfNoValueT,\IfNoValueF}
+% \DoNotIndex{\CurrentOption,\DeclareOption,\ProcessOptions,\RequirePackage}
+% \DoNotIndex{\PackageError,\PackageWarning,\MessageBreak}
+% \DoNotIndex{\dimexpr,\numexpr}
+% \DoNotIndex{\empty,\@empty,\rule,\space,\@tempa,\@tempb,\@tempc,\x}
+% ^^A Weird names used in \@Ahighlight parameter text
+% ^^A \DoNotIndex{\ENDDNE}  ^^A This is directly from mathtools, but...
+% \DoNotIndex{\@nil}  ^^A since I don't know what it means I will
+%                     ^^A prefer this!
+% ^^A Just a long list
+% \DoNotIndex{\@ifnextchar,\@ifclassloaded,\@ifundefined,\@listdepth,
+%             \@nameuse,\arabic,\colorbox,\displaystyle,\fboxrule,\fboxsep,
+%             \frac,\hphantom,\m@th,\mathpalette,\mbox,\newcounter,\newlength,
+%             \newsavebox,\phantom,\setcounter,\setlength,\thickspace,
+%             \@sptoken}
+%
+% ^^A Defined in `exam.cls'.
+% \DoNotIndex{\@checkqueslevel}
+% ^^A Defined in `xcolor.sty'
+% \DoNotIndex{\@ifundefinedcolor,\colorlet,\definecolor}
+% ^^A Defined in `keyval.sty'.
+% \DoNotIndex{\define@key,\setkeys}
+% ^^A Defined in `enumitem.sty'.
+% \DoNotIndex{\newlist,\setlist}
+% ^^A Defined in `amsmath.sty'.
+% \DoNotIndex{\dfrac,\tfrac}
+%
+% \changes{v0.1}{2021/02/16}{Creation of the package.  I guess.}
+%
+% \title{The \Package{hmk} package\thanks{This document corresponds to
+%   \Package{hmk}~\fileversion, dated \filedate.}}
+% \author{rapidcow\\\texttt{<thegentlecow@gmail.com>}}
+% \date{September 12, 2022}
+%
+% \maketitle
+%
+% \begin{abstract}
+%   This describes a dumb little package I wrote just to \hl{highlight}
+%   the answers in my homework assignments.  (And some more, perhaps.)
+% \end{abstract}
+%
+% \tableofcontents
+%
+% \section{List of required packages}
+% The following packages are required:
+% \begin{quote}
+%   amsmath, enumitem, keyval, xcolor, xparse
+% \end{quote}
+%
+% \iffalse
+% To compile this documentation, you will need some extra packages:
+% \begin{quote}
+%   hyperref.
+% \end{quote}
+% \fi
+%
+% \section{\texorpdfstring
+%   {The \cs{highlight} command}
+%   {The highlight command}}
+%   \label{sec:highlight}
+% \DescribeMacro{\highlight}
+% Let's start with the most important macro here.  At first we only had the
+% \cs{hl} macro, which has only one argument, the text, and highlights it
+% with a yellow color.  But in this package we have a more general macro,
+% namely \cs{highlight}.  The syntax for the macro is
+% \begin{macrosynt}
+%   \cs{highlight}\oarg{setup}\marg{color}\marg{text}
+% \end{macrosynt}
+% so for example, |\highlight{yellow}{Hello!}| produces \highlight{yellow}
+% {Hello!}  Optionally, you can provide configurations for the macro.  One
+% thing you can do is to change the margin around the highlight by using the
+% key |hlsurround|, so
+%\begin{verbatim}
+%\highlight[surround=0pt]{yellow}{Hello!}
+%\end{verbatim}
+% would produce \highlight[surround=0pt]{yellow}{Hello!}  Which you can see
+% has no margin.  Notice that you have to drop the ``hl'' prefix and type
+% |surround| instead of |hlsurround|.  This is so that we can have a special
+% namespace for \cs{hl} commands.  See Section~\ref{sec:config} for the
+% available options in this package (which aren't many---really.  I'm too
+% lazy to code all of these.)
+%
+% And of course it shall certainly work in math mode!  Let's say you have
+% this wonderful sequence of calculation, then up to the \emph{final} step
+% you write:
+%
+% \begin{quote}
+%   And so, by the question and our theory of work and energy, the
+%   gravitational potential energy of the ball
+%   \[
+%     \mathit{GPE} = mgh = 4.00\, \mathrm{kg}
+%       \cdot (9.81\, \mathrm{m/s^2})
+%       \cdot 10.0\, \mathrm{m}
+%     \approx \highlight{cyan!30}{392\, \mathrm{J}}.
+%   \]
+% \end{quote}
+% where the math part can be (I'm sure you all can type the text part\ldots{}
+% right?) produced by
+%\begin{verbatim}
+%\[
+%  \mathit{GPE} = mgh = 4.00\, \mathrm{kg}
+%    \cdot (9.81\, \mathrm{m/s^2})
+%    \cdot 10.0\, \mathrm{m}
+%  \approx \highlight{cyan!30}{392\, \mathrm{J}}.
+%\]
+%\end{verbatim}
+% Although, more often than not I would use the \Package{siunitx} package.
+% So the code would actually look like
+%\begin{verbatim}
+%\sisetup{per-mode=symbol}% Make the unit m/s^2 instead of ms^{-2}
+%\[
+%  \mathit{GPE} = mgh = \SI{4.00}{\kilo\gram}
+%    \cdot (\SI{9.81}{\meter\per\second\squared})
+%    \cdot \SI{10.0}{\meter}
+%  \approx \highlight{cyan!30}{\SI{392}{\joule}}.
+%\]
+%\end{verbatim}
+% Do note that this package does not load \Package{siunitx}, so you will
+% have to load it in your preamble for this to work.  (And it's not because
+% I don't love it, just that it's not a dependency for this package\ldots{})
+%
+% \DescribeMacro{\hl}
+% This produces highlighting with a similar vibe of the once familar
+% \cs{hl} in my past physics homework!
+%
+% But first, I'd be dishonest if I didn't tell you that the name of this
+% macro is directly taken from the package \Package{soul}.  Nevertheless, I
+% did try the package but since I realized it doesn't work in math mode, I
+% had to write one on my own, which is why I said this is reminiscent of the
+% original \cs{hl} I wrote.
+%
+% But anyway, to use it just simply call it.  Literally!  Like for example
+%\begin{verbatim}
+%\hl{Hello!!}
+%\end{verbatim}
+% gives \hl{Hello!!}  Optional arguments are also allowed, so you can write
+%\begin{verbatim}
+%\hl[surround=0pt]{Hello!!}
+%\end{verbatim}
+% in a similar fashion to the example we saw for \cs{highlight} to get
+% \hl[surround=0pt]{Hello!!}  With no margin, that is\ldots
+%
+% Also in general the syntax looks like
+% \begin{macrosynt}
+%   \cs{hl}\oarg{setup}\marg{text}
+% \end{macrosynt}
+%
+% (Also if you want to know where the \emph{exquisite} color came
+% from\ldots{} it is internally defined as |hlGold|.  So essentially,
+% \cs{hl} is just a short way to type |\highlight{hlGold}|.)
+%
+% \subsection{A technical note}
+% Internally the \cs{highlight} just uses \cs{colorbox}, which in turn uses
+% \cs{mbox}, meaning that no line wrapping will happen if your solution
+% spans multiple lines and \TeX{} might issue overfull box warnings if it
+% can't fit the box onto one line.  I haven't implemented a solution that
+% can deal with line breaks (like the underline macros in the
+% \Package{ulem} package).
+%
+% \subsection{Defining custom highlight commands}
+% \DescribeMacro{\newhighlight}
+% \DescribeMacro{\renewhighlight}
+% \DescribeMacro{\providehighlight}
+% \DescribeMacro{\declarehighlight}
+% You can define your own highlight command with any one of the command
+% listed to the left.  The general syntax is
+% \begin{macrosynt}
+%   \cs{newhighlight}\marg{command}\oarg{color}\marg{setup}
+% \end{macrosynt}
+% (Does this remind you of the \cs{newcommand} syntax?)
+%
+% When \meta{color} is specified, the defined macro takes in one mandatory
+% argument: text.  When \meta{color} is omitted, the defined macro takes in
+% two mandatory arguments: color, text.  In either way, an optional argument
+% can be applied to the defined macro to override the configuration.
+%
+% \iffalse
+% \cs{newhighlight} works like \cs{newcommand} and only defines the macro if
+% it's not already defined.  \cs{renewhighlight} works like \cs{renewcommand}
+% and only defines the macro if it's already defined.  \cs{providehighlight}
+% defines the macro if it's not defined, and does nothing if it is defined.
+% Finally, \cs{declarehighlight} defines the macro no matter if it is defined
+% or not.
+% \fi
+%
+% As an example, the macro \cs{hl} itself is defined with
+% \cs{declarehighlight}!  It is defined with
+%\begin{verbatim}
+%\declarehighlight{\hl}[hlGold]{}
+%\end{verbatim}
+% so that every time you call \cs{hl}, it uses the color |hlGold| and no
+% configuration (and thus using default settings).
+%
+% \begingroup \newhighlight{\hlthick}{surround=1.2em}%
+% As another example, we can define
+%\begin{verbatim}
+%\newhighlight{\hlthick}{surround=1.2em}
+%\end{verbatim}
+% and a thicker version of the default command without altering the settings
+% So if you call \cs{hl}, \hl{you get this}, but if you call
+% |\hlthick{cyan!30}|, \hlthick{cyan!30}{you get this}.
+%
+% \section{\texorpdfstring
+%   {Aligned \cs{highlight}}
+%   {Aligned highlight}}
+% \DescribeMacro{\Ahighlight}
+% For example
+% \begin{align*}
+%   \Ahighlight{yellow}{f(x) &= \int h(x)\, \mathrm{d}x} \\
+%                            &= g(x).
+% \end{align*}
+% may be produced with
+%\begin{verbatim}
+%\begin{align*}
+%  \Ahighlight{yellow}{f(x) &= \int h(x)\, \mathrm{d}x} \\
+%                           &= g(x).
+%\end{align*}
+%\end{verbatim}
+%
+% \DescribeMacro{\Ahl}
+% Another shortcut for our \emph{exquisite} color (okay I should stop
+% saying that)
+%
+% \subsection{\texorpdfstring
+%   {Defining \cs{Ahighlight} commands}
+%   {Defining Ahighlight commands}}
+%
+% \DescribeMacro{\newAhighlight}
+% \DescribeMacro{\renewAhighlight}
+% \DescribeMacro{\declareAhighlight}
+% \DescribeMacro{\provideAhighlight}
+% This works exactly like \cs{newhighlight} and others, so I won't repeat.
+% The syntax is
+% \begin{quote}
+%   \cs{newhighlight}\marg{command}\oarg{color}\marg{setup}
+% \end{quote}
+%
+% \section{Miscellaneous commands}
+% \DescribeMacro{\pheq}
+% \textbf{Deprecated.}  A simple macro cannot solve problems like these.
+% It is advised that you stop using \cs{pheq} and its related options!
+%
+% Equivalent to |&\hphantom{{}={}}|, thus the macro name, ``\textbf{ph}antom
+% \textbf{eq}uals''.  Made this because I got tired of typing it in front of
+% the \Environ{split} and \Environ{align} environments (and it also looks
+% unpleasantly long in my code).
+%
+% \DescribeMacro{\recip}
+% \DescribeMacro{\drecip}
+% \DescribeMacro{\trecip}
+% |\recip#1| typesets |\frac{1}{#1}| exactly.  For example:
+% \[
+%   T = \recip{2\pi}\, \sqrt{\frac{m}{k}}.
+% \]
+% may be produced with
+%\begin{verbatim}
+%\[
+%  T = \recip{2\pi}\, \sqrt{\frac{m}{k}}.
+%\]
+%\end{verbatim}
+% Similarly, \cs{drecip} and \cs{trecip} do the exact same thing as
+% \cs{recip}, except they call \cs{dfrac} and \cs{tfrac} (which are provided
+% by \Package{amsmath}).
+%
+%
+% \section{Configurations} \label{sec:config}
+% \DescribeMacro{\hmksetup}
+% The usage of this macro is \cs{hmksetup}\oarg{prefix}\marg{config}, where
+% in \meta{config} you would provide comma-separated list of
+% \meta{key}=\meta{value} pairs.  So for example,
+%\begin{verbatim}
+%\hmksetup{hlsurruond=0pt,hlleftmargin=1ex}
+%\end{verbatim}
+% would set the key |hlsurround| to |0pt| and set the key |hlleftmargin|
+% to |1ex|.
+%
+% The \meta{prefix} prepends keys with a certain name, so the above code can
+% actually be typed as
+%\begin{verbatim}
+%\hmksetup[hl]{surround=0pt,leftmargin=1ex}
+%\end{verbatim}
+% I have no idea why I came up with this\ldots{} probably to give a fake
+% sense of namespace (but also to restrict the user from calling irrelavent
+% settings like |pheqafter| when using \cs{hl}!  And it also means we can
+% just reserve one family |hmk| while having separate ``namespaces'' in it,
+% so\ldots{} that's that.)
+%
+% \DescribeMacro{\hlsetup}
+% Equivalent to |\hmksetup[hl]{#1}|; this takes in just one argument.
+% One thing to note is that \cs{hlsetup} is used by \cs{highlight}---namely
+% when you provide the optional \meta{setup} argument (see
+% Section~\ref{sec:highlight}), \cs{highlight} passes the argument to
+% \cs{hlsetup}.  So if you write
+%\begin{verbatim}
+%\hl[surround=0pt]{Hello!}
+%\end{verbatim}
+% it would call
+%\begin{verbatim}
+%\hlsetup{surround=0pt}
+%\end{verbatim}
+% and then typeset the highlight box.  (Of course, in a local scope so that
+% your original configuration won't be overridden.)
+%
+% And here are the keys and their appropriate description (I'm too lazy
+% to format this haha kill me)
+%
+% ``Default'' refers to the inital setup while loading the package.
+% On the other hand, ``\Package{keyval} default'' is means the default
+% argument when you specify nothing.  Usually this is empty, so that only
+% specifying the key without the value is an error.  But when this is filled
+% (which is very unlikely), you can specify \emph{just} the key and then
+% when you use one of the setup commands, you assign that default value to
+% that key.
+%
+% \begingroup \renewcommand{\arraystretch}{1.2}
+% ^^A TODO: Need to make uhh all of these fixed width.
+% ^^A But again, what is keyval default??
+% \begin{longtable}{ >{\ttfamily} l
+%       >{\raggedright \arraybackslash} p{1.2in}
+%       l l }
+%   \toprule
+%   \multicolumn{1}{ l }{Key} & Description & Default
+%     & \Package{keyval} default \\
+%   \midrule
+%   hlsurround & The margin around \cs{highlight} & \texttt{0.5ex} \\
+%   hlleftmargin  & Space to the left of the highlight box. & \texttt{0pt} \\
+%   hlrightmargin & Space to the right of the box. & \texttt{0pt} \\
+%   hlabovemargin & Space above the box. & \texttt{0pt} \\
+%   hlbelowmargin & Space below the box. & \texttt{0pt} \\
+%   pheqbefore & Space inserted before the equal sign. & \cs{thickspace} \\
+%   pheqafter & Space inserted after the equal sign. & \cs{thickspace} \\
+%   \bottomrule
+% \end{longtable}
+% \endgroup
+%
+% \section{Bugs}
+% Somehow using \cs{colorbox}, the highlighted area becomes too small
+% in some cases with |surround=0pt| (which means that |\fboxsep=0pt| while
+% the typesetting takes place).  For example,
+% \[
+%   \zeta(s) = \hl[surround=0pt]{\recip{1 - \recip{p^s}}}.
+% \]
+% produced with
+%\begin{verbatim}
+%\[
+%  \zeta(s) = \hl[surround=0pt]{\recip{1 - \recip{p^s}}}.
+%\]
+%\end{verbatim}
+% The ``$1$'' in the numerator seems to be sticking out of the box a little.
+% (Does it have to do with \cs{fboxrule}?)
+%
+% \StopEventually{}
+% \clearpage ^^A Serious business about to start >:3
+% \section{Implementation}
+%  Much of the code doesn't need comments, but for learning purposes I will
+%  be excessively verbose just so I, and potentially other people, can take
+%  note of some of the tricky parts of this code.
+%    \begin{macrocode}
+%<*package>
+%    \end{macrocode}
+%  Several packages we require for this package.
+%    \begin{macrocode}
+\RequirePackage{amsmath,enumitem,keyval,xcolor,xparse}
+%    \end{macrocode}
+%  \begin{macro}{\hl@surround}
+%  \changes{v0.3b}{2021/05/30}{Set the highlight lengths to private
+%    namespace.}
+%  \begin{macro}{\hl@abovemargin}
+%  \changes{v0.2}{2021/04/13}{Added and implemented various margins.}
+%  \begin{macro}{\hl@belowmargin}
+%  \begin{macro}{\hl@leftmargin}
+%  \begin{macro}{\hl@rightmargin}
+%    Define a bunch of lengths.
+%    \begin{macrocode}
+\newlength{\hl@surround}
+\newlength{\hl@abovemargin}
+\newlength{\hl@belowmargin}
+\newlength{\hl@leftmargin}
+\newlength{\hl@rightmargin}
+%    \end{macrocode}
+%    Set the default value---which is, only one of them.  The rest are all
+%    just going to be |0pt| (as if they don't exist, ha!)
+%    \begin{macrocode}
+\setlength{\hl@surround}{0.5ex}
+%    \end{macrocode}
+%  \end{macro}\end{macro}\end{macro}\end{macro}\end{macro}
+%
+%  Now we also need a temporary box and length for \cs{highlight}.
+%  A temporary length is needed instead of \cs{@tempdima} and such because
+%  \cs{rule} internally uses them.  Maybe one day we can use the \TeX{}
+%  primitive \cs{vrule} instead, but\ldots{} that's a job for another day.
+%    \begin{macrocode}
+\newsavebox\hmk@tempboxa
+\newlength{\hmk@tempdima}
+%    \end{macrocode}
+%  \changes{v0.3a}{2021/04/30}{Changed naming scheme to differentiate
+%    those for the package in general and the highlight command.}
+%  Define keys under families |hl| and |hmk| for the lengths.
+%    \begin{macrocode}
+\def\hmk@define@length#1{
+  \define@key{hmk}{hl#1}{\setlength{\@nameuse{hl@#1}}{##1}}
+}
+%    \end{macrocode}
+%
+%  Now set up the keys.
+%    \begin{macrocode}
+\hmk@define@length{surround}
+\hmk@define@length{abovemargin}
+\hmk@define@length{belowmargin}
+\hmk@define@length{leftmargin}
+\hmk@define@length{rightmargin}
+\let\hmk@define@length\relax
+%    \end{macrocode}
+%
+%  \begin{macro}{\hmksetup}
+%    ^^A Special characters must be escaped with escape character for
+%    ^^A makeindex to work.  `gglo.ist' defines quote as `!', so we need to
+%    ^^A use `!' to escape.
+%    ^^A https://tex.stackexchange.com/a/324856
+%    ^^A https://tex.stackexchange.com/a/484502 (immensely helped!!!)
+%    \changes{v0.3}{2021/04/13}{Keyval configurations!!}
+%    User interface for setting keys under families |hl| and |hmk|.
+%    In reality, we only require one namespace and one command \cs{hmksetup}
+%    that has access to it all.
+%
+%    That being said, we make \cs{hmksetup} have two functions.  One is to
+%    simply to be used as an interface to call \cs{setkeys}, and the other is
+%    to call \cs{setkeys}, but with every key prefixed by a specified name.
+%    \begin{macrocode}
+\long\def\hmksetup{%
+  \@ifnextchar[%
+    {\hmk@setkeys}{\setkeys{hmk}}%
+}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\hmk@setkeys}
+%    Here everything will be done in a similar fashion of \cs{setkeys}.
+%    One thing to note is that \cs{hmk@prefix} refers to the string appended
+%    to the keys, and not the family (first argument of \cs{setkeys});
+%    the family is defined as \cs{hmk@family}.
+%    \begin{macrocode}
+%% Code borrowed from `keyval.sty'.
+\long\def\hmk@setkeys[#1]#2{%
+  \def\hmk@family{hmk}%
+  \def\hmk@prefix{#1}%
+%    \end{macrocode}
+%    Start collecting the arguments.  A comma is placed after |#2| to
+%    separate from the list provided by the user.  \cs{relax} serves as a
+%    sentinel, which we will use to tell the end of iteration.
+%    \begin{macrocode}
+  \hmk@do#2,\relax,}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\hmk@do}
+%    Now we will execute the iteratoin.
+%    \begin{macrocode}
+\long\def\hmk@do#1,{%
+%    \end{macrocode}
+%    You might say that \cs{@empty} was redundant.  Well I could've
+%    said so too!  But just picture the moment when |#1| is empty.
+%    |\ifx\relax\else| is sure gonna evaluate to false and thus
+%    stopping the recursion.  Now with \cs{@empty}, this if-statement is
+%    guarenteed to be false even when |#1| is empty, since \cs{relax} and
+%    \cs{@empty} are not equivalent (for reasons I can't quite explain).
+%    \begin{macrocode}
+  \ifx\relax#1\@empty \else
+%    \end{macrocode}
+%    Now we have to split this arguments into parts.  This is a bit trickier
+%    to explain so I won't expand on that now.  One thing to note is that
+%    \cs{relax} is used as a delimiter for the end of argument of
+%    \cs{hmk@split}.
+%    \begin{macrocode}
+    \hmk@split#1==\relax
+%    \end{macrocode}
+%    Honestly I still don't know why \cs{expandafter} is necessary here.
+%    A similar trick is used for macros like \cs{@ifnextchar} and \cs{@for}
+%    I believe, but I don't get it.
+%    \begin{macrocode}
+    \expandafter\hmk@do
+  \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\hmk@split}
+%    Now we split into parts.  Similar to how \cs{Ahighlight} works, this is
+%    split into three parts, |#1|, |#2|, |#3|.  Only the |#1| and |#2| are
+%    what we're going to use as the key-value pair, actually.  |#3| is all
+%    the tokens that's left after two |=| have been scanned and right before
+%    a \cs{relax} token (which is placed as a sentinel in \cs{hmk@do}).
+%    We will discuss what each part contains as we progress.
+%    \begin{macrocode}
+\long\def\hmk@split#1=#2=#3\relax{%
+%    \end{macrocode}
+%    Now we will examine |#1|.  Of course, if |#1| is empty, then it means
+%    that the entire argument doesn't have any non-space token.  In this case
+%    we simply do nothing.  (\cs{hmk@@sp@def} strips away any leading or
+%    trailing space, I guess---that part of code is what I don't understand)
+%    \begin{macrocode}
+  \hmk@@sp@def\hmk@tempa{#1}%
+  \ifx\hmk@tempa\@empty \else
+%    \end{macrocode}
+%    Now we want to know if zero or at least one |=| is provided,
+%    the former implying us to pass only the key, and the latter
+%    implying we need to pass key-value altogether.
+%
+%    This can be determined by |#3|, which is only empty when no
+%    |=| is provided.  This is because when one |=| is provided,
+%    \cs{hmk@split} will gather that |=| and the first |=| in \cs{hmk@do},
+%    but \emph{not} the second |=|.  This leaves |#3| to collect that |=|
+%    and so |#3| is not empty anymore.
+%
+%    \Package{keyval} uses the following construct to check the emptiness
+%    of |#3|, which\ldots{} I won't modify.
+%    \begin{macrocode}
+  \ifx\@empty#3\@empty
+    \setkeys{\hmk@family}{\hmk@prefix\hmk@tempa}%
+%    \end{macrocode}
+%    If |#3| is not empty, we can just go straight ahead and take |#1|
+%    and |#2|, which are definitely filled with the key and value---in fact
+%    this is what \Package{keyval} does, and you can try this with something
+%    like \cs{setkeys}|{|\meta{family}|}||{a=1=2}| and notice
+%    that |=2| is ignored.
+%
+%    However here we will explicitly check for the case where the user has
+%    provided more than one |=|, in which case the second |=| the user
+%    provided will cause |#3| to end up containing at least two |=|: the two
+%    |=| from \cs{hmk@do}.  So we check whether |#3| contains exactly one |=|
+%    and issue a warning if it is not.
+%    \begin{macrocode}
+  \else \def\@tempa{#3}\def\@tempb{=}%
+    \ifx\@tempa\@tempb \else
+      \PackageWarning{hmk}{Extra `=' is ignored}%
+    \fi
+    \setkeys{\hmk@family}{\hmk@prefix\hmk@tempa=#2}%
+  \fi \fi
+}
+%    \end{macrocode}
+%  \end{macro}
+%  Now \cs{@tempa} would be a temporary macro that stores the definition.
+%  \cs{@tempa} will be called later to replace every |#1| with a space token.
+%    \begin{macrocode}
+\def\@tempa#1{%
+%    \end{macrocode}
+%  \begin{macro}{\hmk@@sp@def}
+%    This macro just removes space in the fashion of \Package{keyval}.
+%    In this case we only need to remove the space before \cs{hmk@prefix},
+%    but I'm a bit too lazy to code that (and it's somewhat hard to for my
+%    current knowledge of \TeX).  Instead here is the source code directly
+%    copy-and-pasted.
+%    \begin{macrocode}
+\long\def\hmk@@sp@def##1##2{%
+  \futurelet\hmk@tempa\hmk@@sp@d##2\@nil\@nil#1\@nil\relax##1}%
+%    \end{macrocode}
+%  \end{macro}
+%    Refer to the documentation of \Package{keyval} for the rest.
+%    \begin{macrocode}
+\def\hmk@@sp@d{%
+  \ifx\hmk@tempa\@sptoken
+    \expandafter\hmk@@sp@b
+  \else
+    \expandafter\hmk@@sp@b\expandafter#1%
+  \fi}%
+\long\def\hmk@@sp@b#1##1 \@nil{\hmk@@sp@c##1}%
+  }
+\@tempa{ }
+\long\def\hmk@@sp@c#1\@nil#2\relax#3{\toks\z@{#1}\edef#3{\the\toks\z@}}
+%% End of code borrowed from `keyval.sty'.
+%    \end{macrocode}
+%
+%  \begin{macro}{\hlsetup}
+%  \cs{hlsetup} is just basically calling \cs{hmksetup} but with ``hl''
+%  as a prefix of every key.
+%    \begin{macrocode}
+\long\def\hlsetup#1{\hmksetup[hl]{#1}}
+%    \end{macrocode}
+%  \end{macro}
+%  Because we're about to process the options, we need to define keys for
+%  |pheq| in advance.
+%    \begin{macrocode}
+\define@key{hmk}{pheqbefore}{\def\pheq@before{#1}}
+\define@key{hmk}{pheqafter}{\def\pheq@after{#1}}
+\hmksetup[pheq]{before=\thickspace,after=\thickspace}
+%    \end{macrocode}
+%
+%  Now there's a weird thing that I want to do here: passing the
+%  key-value package options to \cs{hmksetup}.  The following code
+%  is due to a post by \href{https://tex.stackexchange.com/a/55631}{egreg}
+%  on \TeX{} Stack Exchange.  (Maybe it'd be better to use
+%  \Package{kvoptions}, but I really don't want to separate the interface
+%  in package option and \cs{hmksetup}, so for now\ldots{} this is the
+%  clumsy code we're working with.)
+%
+% ^^A XXX: Why is this `enit' stuff here??
+%    \begin{macrocode}
+% \newif\ifhmk@use@enit
+% \DeclareOption{noenit}{\hmk@use@enitfalse}
+% \DeclareOption{enit}{\hmk@use@enit@true}
+%    \end{macrocode}
+%    \begin{macrocode}
+\DeclareOption*{%
+  \begingroup\edef\x{\endgroup\noexpand
+    \hmksetup{\expandafter\noexpand\CurrentOption}}\x}
+% \ExecuteOptions{enit}
+\ProcessOptions\relax
+%    \end{macrocode}
+%
+%  \begin{macro}{\highlight}
+%    The optional argument |#1| is the parameters passed to |\hlsetup|,
+%    |#2| is the color the highlight box is in, and |#3| is the text
+%    to be highlighted.
+%    \begin{macrocode}
+\DeclareDocumentCommand{\highlight}{ O{} m m }{%
+%    \end{macrocode}
+%    As discussed in \href{https://tex.stackexchange.com/a/27594}{this} answer,
+%    a \cs{relax} token is needed here to correctly identify whether we are
+%    in math mode if this command is placed right after |&| in alignment.
+%    In addition, we will start a group so that changes are local.
+%    \begin{macrocode}
+  \relax \begingroup
+%    \end{macrocode}
+%    Setup.  We will just let emtpy argument be, since |\hlsetup{}| does
+%    nothing.
+%    \begin{macrocode}
+  \hlsetup{#1}%
+  \ifmmode
+%    \end{macrocode}
+%  \cs{mathpalette} accepts two arguments and ultimately expands to
+%  |#1|\meta{math style}|#2| (here |#1| and |#2| are the arguments of
+%  \cs{mathpalette}).  Here the resulting call is \cs{hl@do}|{#2}|^^A
+%  \meta{math style}|#3|.
+%    \begin{macrocode}
+    \mathpalette{\hl@do{#2}}{#3}%
+  \else
+%    \end{macrocode}
+%  Similar to the code above for math mode, we pass the same arguments,
+%  but instead us a \cs{relax} token to distinguish text mode.
+%    \begin{macrocode}
+    \hl@do{#2}\relax{#3}%
+  \fi \endgroup
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\hl@do}
+%    Argument |#1| is the color of the highlight box, |#2| is either a math
+%    style if we're in math mode (one of \cs{displaystyle}, \cs{textstyle},
+%    etc.\@) or \cs{relax} if we're in text mode.  |#3| is the text.
+%    \begin{macrocode}
+\def\hl@do#1#2#3{%
+%    \end{macrocode}
+%    First, depending on whether we're in math mode or text mode, we will set the
+%    box differently.  This is distinguished by checking
+%    |#2| is \cs{relax}.
+%    (\textbf{Question}: Why does |\ifx| work, but not |\if|??)
+%    \begin{macrocode}
+  \ifx#2\relax
+    \setbox\hmk@tempboxa=\hbox{#3}%
+  \else
+%    \end{macrocode}
+%    Note: \cs{m@th} is equivalent to |\mathsurround=0pt|.
+%    \href{https://tex.stackexchange.com/a/153398}{egreg} has a nice
+%    explanation of this.
+%
+%    \cs{m@th} seems to work in either way!  (|$#2#3\m@th$| and |$\m@th#2#3$|
+%    both seem to work)
+%    \begin{macrocode}
+    \setbox\hmk@tempboxa=\hbox{$#2#3\m@th$}%
+  \fi
+%    \end{macrocode}
+%    Now we need to change \cs{fboxsep}, which is a dimen that is sort of like
+%    the margin of a colorbox.
+%    \begin{macrocode}
+  \setlength{\fboxsep}{\hl@surround}%
+%    \end{macrocode}
+%    Now we will define a temporary macro that creates margin around the
+%    colorbox.  |##1| is the sideways margin, |##2| is the margin above, and
+%    |##3| is the margin below.
+%    \begin{macrocode}
+  \def\hl@strut##1##2##3{%
+%    \end{macrocode}
+%    Set \cs{hmk@tempdima} to the amount to dip below (the margin below),
+%    taking account of the \cs{fboxsep}, the depth of the box itself, and
+%    the margin below |##3|.
+%    \begin{macrocode}
+    \setlength{\hmk@tempdima}
+      {\dimexpr\fboxsep + \dp\hmk@tempboxa + ##3\relax}%
+%    \end{macrocode}
+%    Now for a very convenient method to create margin (recall that the call
+%    signature is \cs{rule}\oarg{raise height}\marg{width}\marg{thickness}).
+%    \begin{macrocode}
+    \phantom{\rule[-\hmk@tempdima]%
+      {##1}{\dimexpr\hmk@tempdima + \ht\hmk@tempboxa + \fboxsep
+        + ##2\relax}}%
+  }%
+%    \end{macrocode}
+%    Now define struts on the left and right.
+%    \begin{macrocode}
+  \def\hl@lstrut{%
+    \hl@strut\hl@leftmargin\hl@abovemargin\hl@belowmargin}%
+  \def\hl@rstrut{%
+    \hl@strut\hl@rightmargin\hl@abovemargin\hl@belowmargin}%
+%    \end{macrocode}
+%    Typeset the box.  (Finally!)  \cs{mbox} is used here to prevent the
+%    margin struts accidentally being displaced on a different paragraph.
+%    \begin{macrocode}
+  \mbox{\hl@lstrut\colorbox{#1}{\usebox\hmk@tempboxa}\hl@rstrut}%
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\Ahighlight}
+%    This macro takes in 3 arguments: |#1| is optional configuration passed to
+%    \cs{hlsetup}, |#2| is the color, and |#3| is the text.
+%
+%    This code is copied from \cs{Aboxed} in \Package{mathtools} with slight
+%    alterations to adapt to our scenario.  \Package{mathtools} doesn't
+%    document this but I find the email archive it links to very helpful
+%    (specifically \href{https://groups.google.com/g/comp.text.tex/c/XWY5XyobUTQ/m/GXWfOwcqds8J}{this}).
+%
+%    It is worth noting that this macro assumes math mode with display style.
+%    \begin{macrocode}
+%% This macro is inspired by \Aboxed from `mathtools.sty'.
+\DeclareDocumentCommand{\Ahighlight}{ O{} m m }{%
+%    \end{macrocode}
+%    Increase the master counter.  The smart use of \cs{let} here
+%    prevents \TeX{} from expanding it (in case the macro is placed right
+%    after |&|).
+%    \begin{macrocode}
+  \let\bgroup{\romannumeral-`}%
+  \hmk@Ahl{#1}{#2}#3&&\@nil
+}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\hmk@Ahl}
+%    This is where we split up the arguments using |&|.  The arguments |#1|,
+%    |#2| are just accepted as is, but starting from |#3| is where it
+%    gets tricky.  The macro code demands |&| tokens, which are all provided by
+%    the call above in case the text doesn't contain any |&| token.  However,
+%    when there is one |&| token, then the part before |&| is assigned to
+%    |#4| and the part after is assigned |#4|.  Despite the two |&| remaining,
+%    the token \cs{@nil} makes sure that |#5| consumes anything that's left.
+%
+%    That being said, it \emph{is} currently impossible for \cs{Ahighlight} to
+%    contain more than one |&|, since any more |&| would just end up in |#5|
+%    and ignored.
+%    \begin{macrocode}
+\def\hmk@Ahl#1#2#3&#4&#5\@nil{%
+%    \end{macrocode}
+%    Decrease the master counter.
+%    \begin{macrocode}
+  \ifnum0=`{}\fi
+%    \end{macrocode}
+%    Load the configuration so we get the right width for \cs{hl@surround}.
+%    \begin{macrocode}
+  \hlsetup{#1}%
+%    \end{macrocode}
+%    Create a box with that will help us find the width of the box before the
+%    point of alignment.  An empty math atom |{}| acts like an ordinary symbol,
+%    and is placed after |#3| to get proper spacing.  ^^A But how is this useful?
+%    \begin{macrocode}
+  \setbox\z@=\hbox{$\displaystyle#3{}\m@th$\kern\hl@surround}%
+%    \end{macrocode}
+%    Now take the aforementioned box and define a temporary macro that shifts
+%    things around.  Note that since changes here are local and will be reset
+%    right after \TeX{} reads the |&| token, we need to use \cs{the} to expand
+%    the dimen to pass on the width to the next column.
+%    \begin{macrocode}
+  \edef\@tempa{\kern \wd\z@ &\kern -\the\wd\z@}%
+%    \end{macrocode}
+%    Apply the shifting and typeset the box.  Options are passed to
+%    \cs{highlight} fully.
+%    \begin{macrocode}
+  \@tempa\highlight[#1]{#2}{#3#4}%
+}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\hmk@newhighlight}
+%  \changes{v0.3b}{2021/06/02}{Making more sense of the call signature to
+%    \cs{newhighlight} and others.}
+%  ^^A This is the canonical way to blow a trumpet up Sans' butt.
+%  ^^A Say hi, Sans!
+%  \noindent
+%  |#1|: (internal use) \Package{xparse} new command macro\\
+%  |#2|: name of the new highlight macro\\
+%  |#3|: color name\\
+%  |#4|: highlight configurations for \cs{hlsetup}
+%    \begin{macrocode}
+\DeclareDocumentCommand{\hmk@newhighlight}{ m m o m }{%
+%    \end{macrocode}
+%  \changes{v0.3a}{2021/04/30}{Added error message for \cs{newhighlight} and
+%    others to prevent user redefining \cs{highlight}.}
+%  First we check if the user is attempting to redefine \cs{highlight} (which
+%  is very dangerous!)  There are some macros that we can safely dismiss
+%  that won't do any harm: \cs{NewDocumentCommand} will issue error for any
+%  macro already defined, and \cs{ProvideDocumentCommand} won't override
+%  any predefined macros either.
+%    \begin{macrocode}
+  \ifx#1\NewDocumentCommand
+  \else \ifx#1\ProvideDocumentCommand
+%    \end{macrocode}
+%  However, if the new-command macro is anything else (which has the danger
+%  of overriding the definition of \cs{highlight}), we have to make sure that
+%  the command to be defined is not \cs{highlight}.
+%    \begin{macrocode}
+  \else \ifx#2\highlight
+    \PackageError{hmk}{Cannot redefine \protect\highlight}
+     {Commands like \protect\newhighlight\space internally use
+      \protect\highlight\space to define the new macro, so if you define
+      \protect\highlight, bad stuff will happen... (infinite recursion)%
+      \MessageBreak}
+  \fi \fi \fi
+%    \end{macrocode}
+%  Now we need to branch off accordingly to whether the color parameter is
+%  provided.  If it is provided, then define a macro with one mandatory
+%  argument: text.  Otherwise, define a macro with two mandatory arguments:
+%  color and text.  In either case, an optional argument can be provided to
+%  override the setup defined in |#4|.
+%    \begin{macrocode}
+  \IfNoValueTF{#3}
+    {#1{#2}{ O{} m m }{\highlight[#4,##1]{##2}{##3}}}%
+    {#1{#2}{ O{} m }{\highlight[#4,##1]{#3}{##2}}}%
+}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\newhighlight}
+%  \changes{v0.2}{2021/04/13}{Added \cs{newhighlight}!!}
+%  \begin{macro}{\renewhighlight}
+%  \begin{macro}{\providehighlight}
+%  \begin{macro}{\declarehighlight}
+%    Provide public versions of \cs{@newhighlight}, each corresponding to an
+%    \Package{xparse} macro.
+%    \begin{macrocode}
+\def\newhighlight{\hmk@newhighlight\NewDocumentCommand}
+\def\renewhighlight{\hmk@newhighlight\RenewDocumentCommand}
+\def\providehighlight{\hmk@newhighlight\ProvideDocumentCommand}
+\def\declarehighlight{\hmk@newhighlight\DeclareDocumentCommand}
+%    \end{macrocode}
+%  \end{macro}\end{macro}\end{macro}\end{macro}
+%
+%  \begin{macro}{\hmk@newAhighlight}
+%    Now for a similar implementation for \cs{Ahighlight}.
+%    \begin{macrocode}
+\DeclareDocumentCommand{\hmk@newAhighlight}{ m m o m }{%
+  \ifx#1\NewDocumentCommand
+  \else \ifx#1\ProvideDocumentCommand
+  \else \ifx#2\Ahighlight
+    \PackageError{hmk}{Cannot redefine \protect\Ahighlight}
+     {Commands like \protect\newAhighlight\space internally use
+      \protect\Ahighlight\space to define the new macro, so if you define
+      \protect\Ahighlight, bad stuff will happen... (infinite recursion)%
+      \MessageBreak}
+%    \end{macrocode}
+%    Why on Earth would \emph{anyone} try to redefine \cs{highlight}
+%    \emph{here}???  I'm tired of writing an error message here.  Screw them.
+%    \begin{macrocode}
+  \fi \ifx#2\highlight
+    \PackageError{hmk}{Cannot redefine \protect\highlight}
+      {Nope.  You just can't.\MessageBreak}
+  \fi \fi \fi
+  \IfNoValueTF{#3}
+    {#1{#2}{ O{} m m }{\Ahighlight[#4,##1]{##2}{##3}}}%
+    {#1{#2}{ O{} m }{\Ahighlight[#4,##1]{#3}{##2}}}%
+}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\newAhighlight}
+%  \begin{macro}{\renewAhighlight}
+%  \begin{macro}{\provideAhighlight}
+%  \begin{macro}{\declareAhighlight}
+%    Provide public interface.
+%    \begin{macrocode}
+\def\newAhighlight{\hmk@newAhighlight\NewDocumentCommand}
+\def\renewAhighlight{\hmk@newAhighlight\RenewDocumentCommand}
+\def\provideAhighlight{\hmk@newAhighlight\ProvideDocumentCommand}
+\def\declareAhighlight{\hmk@newAhighlight\DeclareDocumentCommand}
+%    \end{macrocode}
+%  \end{macro}\end{macro}\end{macro}\end{macro}
+%
+%  \changes{v0.3b}{2021/06/02}{Renamed the color \texttt{MyGold} to
+%    \texttt{hlGold}.}
+%  We are fully irresponsible for the notorious definition of
+%  \cs{@ifundefinedcolor}; please blame \Package{xcolor}.
+%
+%  That being said, this does define the \emph{classic} yellow color that
+%  we all love.  (This is essentially equivalent to ``|Gold!50|'' if you use
+%  the \Option{svgnames} option of \Package{xcolor}\ldots)
+%
+%  (Actually now come to think of it\ldots{} I still think it is necessary
+%  that we override the definition of |hlGold|, in case it was defined.
+%  Otherwise we're just gonna get a quirky color and users are not gonna
+%  like it.)
+%    \begin{macrocode}
+% \@ifundefinedcolor{hlGold}{
+\definecolor{hlGold}{rgb}{1,0.844,0}
+\colorlet{hlGold}{hlGold!50}
+% }{}
+%    \end{macrocode}
+%
+%  \begin{macro}{\hl}
+%  ^^A Makes more sense as this is becoming a formal package...
+%  \changes{v0.3b}{2021/06/02}{Defining \cs{hl} with \cs{declarehighlight}
+%    now.}
+%  This is a shortcut for our lovely \emph{lovely} color.
+%    \begin{macrocode}
+% \DeclareDocumentCommand{\hl}{ o m }{\highlight[#1]{hlGold}{#2}}
+\declarehighlight{\hl}[hlGold]{}
+%    \end{macrocode}
+%  \end{macro}
+%  \begin{macro}{\Ahl}
+%  Just yet another shortcut for our \emph{beautiful exquisite} color.
+%  We haven't got any \cs{newAhighlight}, so this should do the job.
+%    \begin{macrocode}
+% \DeclareDocumentCommand{\Ahl}{ o m }{\Ahighlight[#1]{hlGold}{#2}}
+\declareAhighlight{\Ahl}[hlGold]{}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\pheq}
+%  ``Always helpful,'' as one wise man once said\ldots{} who could it have
+%  been?  ^^A (Just FYI I wrote this ``phantom-equals (always helpful)''
+%  ^^A in the original code, and that's why I'm being excessively boastful
+%  ^^A over here XD Just so you get the joke...)
+%    \begin{macrocode}
+\def\pheq{&\pheq@before\hphantom{=}\pheq@after}
+%    \end{macrocode}
+%  \end{macro}
+%
+%  \begin{macro}{\recip}
+%  \begin{macro}{\drecip}
+%  \changes{v0.3b}{2021/06/04}{Added \cs{drecip} and \cs{trecip}\ldots{} why?}
+%  \begin{macro}{\trecip}
+%    Reciprocal.  The latter two \cs{drecip} and \cs{trecip} require
+%    \Package{amsmath} loaded.
+%    \begin{macrocode}
+\def\recip#1{\frac{1}{#1}}
+\def\drecip#1{\dfrac{1}{#1}}
+\def\trecip#1{\tfrac{1}{#1}}
+%    \end{macrocode}
+%  \end{macro}\end{macro}\end{macro}
+%  Next we check whether the \Class{exam} class is loaded.
+%    \begin{macrocode}
+\@ifclassloaded{exam}
+  {
+%    \end{macrocode}
+%  \begin{macro}{\setquestion}
+%    For such \cs{setquestion} macros, we can expect invalid input to be
+%    complained by \cs{numexpr}\ldots{} \emph{except} when the input is
+%    empty.  That's when we need to issue a warning ourselves.
+%
+%    Optionally we can check for the right level with defined by
+%    the class \Class{exam}\ldots
+%    \begin{macrocode}
+    \providecommand{\setquestion}[1]{%
+      \@ifundefined{@checkqueslevel}{}{\@checkqueslevel{question}}%
+      \def\@tempa{#1}%
+      \ifx\@tempa\empty
+        \PackageWarning{hmk}{%
+          \protect\setquestion\space received empty argument;
+          defaulting to 0.}
+      \fi
+      \setcounter{question}{\numexpr#1-1\relax}}
+%    \end{macrocode}
+%  \end{macro}
+%    Ahh\ldots{} i was wondering where the |part| counter could possibly be
+%    defined!  It turns out that it was defined by |article.cls|!  (The top
+%    level of headers above |section|)  And so that's why |exam.cls|
+%    has to give this part counter a special name |partno|\ldots
+%    \begin{macrocode}
+    \providecommand{\setpart}[1]{%
+      \@ifundefined{@checkqueslevel}{}{\@checkqueslevel{part}}%
+      \def\@tempa{#1}%
+      \ifx\@tempa\empty
+        \PackageWarning{hmk}{%
+          \protect\setpart\space received empty argument;
+          defaulting to 0.}%
+      \fi
+      \setcounter{partno}{\numexpr#1-1\relax}}
+    \providecommand{\setsubpart}[1]{%
+      \@ifundefined{@checkqueslevel}{}{\@checkqueslevel{subpart}}%
+      \def\@tempa{#1}%
+      \ifx\@tempa\empty
+        \PackageWarning{hmk}{%
+          \protect\setsubpart\space received empty argument;
+          defaulting to 0.}%
+      \fi
+      \setcounter{subpart}{\numexpr#1-1\relax}}
+    \providecommand{\setsubsubpart}[1]{%
+      \@ifundefined{@checkqueslevel}{}{\@checkqueslevel{subsubpart}}%
+      \def\@tempa{#1}%
+      \ifx\@tempa\empty
+        \PackageWarning{hmk}{%
+          \protect\setsubsubpart\space received empty argument;
+          defaulting to 0.}%
+      \fi
+      \setcounter{subsubpart}{\numexpr#1-1\relax}}
+  }{
+%    \end{macrocode}
+%  \begin{environment}{question}
+%    \changes{v0.3}{2021/04/22}{Added the \Environ{question}
+%      environment\ldots{} for those of us who don't want to load the
+%      \Class{exam} class all the time.}
+%    Otherwise, we will be making up environments for \Class{exam}!
+%    \begin{macrocode}
+    \newlist{question}{enumerate}{5}
+    \setlist[question,1]{label=\arabic*.}
+    \setlist[question,2]{label=(\alph*)}
+    \setlist[question,3]{label=(\roman*)}
+    \setlist[question,4]{label=(\Alph*)}
+    \setlist[question,5]{label=(\Roman*)}
+%    \end{macrocode}
+%  \end{environment}
+%  \begin{macro}{\setquestion}
+%  Oh yeah, and \cs{@listdepth} is a counter allocated by \LaTeX{}
+%  that keeps track of the nested level of the \Environ{enumerate}
+%  environment.  It seems that \Class{enumitem} also uses it when defining
+%  its custom lists, so I put this here.
+%
+%  \cs{romannumeral} is a weird \TeX{} primitive\ldots{} I said weird
+%  because it somehow accepts both integers and counters (which is why I
+%  didn't have to put something like ``|\the\@listdepth|'' in the optional
+%  argument).
+%    \begin{macrocode}
+    \DeclareDocumentCommand{\setquestion}{ O{\@listdepth} m }{%
+%    \end{macrocode}
+%  Like the \cs{setquestion} before\ldots{} issue the same warning.
+%    \begin{macrocode}
+      \def\@tempa{#1}%
+      \ifx\@tempa\empty
+        \PackageWarning{hmk}{%
+          \protect\setquestion\space received empty argument;
+          defaulting to 0.}%
+      \fi
+      \setcounter{question\romannumeral#1}{\numexpr#2-1\relax}%
+    }
+  }
+%</package>
+%    \end{macrocode}
+%  \end{macro}
+% \Finale
+\endinput

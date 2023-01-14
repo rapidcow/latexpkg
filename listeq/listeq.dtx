@@ -1,0 +1,430 @@
+% \iffalse meta-comment
+%
+% i stole the code haha (i give credits though)
+%
+% \fi
+%
+% \iffalse
+%<driver|package>\NeedsTeXFormat{LaTeX2e}[2020/10/01]
+%<*driver>
+\ProvidesFile{listeq.dtx}
+\documentclass{ltxdoc}
+\usepackage[a4paper]{geometry}
+\usepackage{listeq}
+\usepackage{mathpazo,listings,hyperref,url}
+\usepackage{amsmath,minted,mleftright,siunitx,microtype}
+\hypersetup{colorlinks}
+
+% doubly stolen from the example environment of minted.dtx:
+% http://tug.ctan.org/macros/latex/contrib/minted/minted.dtx
+\newenvironment{latexcode}
+  {\VerbatimEnvironment\begin{VerbatimOut}[gobble=2]{example.out}}
+  {\end{VerbatimOut}\noindent
+   \inputminted[frame=lines,linenos]{latex}{example.out}}
+\newcommand*{\Package}[1]{\textsf{#1}}
+\newcommand*{\Environ}[1]{\texttt{#1}}
+
+\EnableCrossrefs
+\CodelineIndex
+\RecordChanges
+% Uncomment this to hide implementation
+% \OnlyDescription
+\begin{document}
+  \DocInput{listeq.dtx}
+  \PrintChanges
+  \PrintIndex
+\end{document}
+%</driver>
+% \fi
+%
+% \CheckSum{0}
+%
+% \CharacterTable
+%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+%
+% \GetFileInfo{listeq.sty}
+%
+% ^^A Initially stolen from `xcolor.dtx'
+% \DoNotIndex{\def,\gdef,\edef,\xdef,\long,\let,\futurelet}
+% \DoNotIndex{\ifnum,\ifdim,\iftrue,\iffalse,\ifx,\ifcase,\else,\or,\fi}
+% \DoNotIndex{\ifhmode,\ifvmode,\ifmmode,\ifinner}
+% \DoNotIndex{\bgroup,\egroup,\begingroup,\endgroup,\begin,\end}
+% \DoNotIndex{\relax,\endinput}
+% \DoNotIndex{\csname,\endcsname,\string,\the,\noexpand,\expandafter,\protect}
+% \DoNotIndex{\advance,\count,\dimen}
+% \DoNotIndex{\m@ne,\z@,\@ne,\tw@,\p@,\@@tmp}
+% \DoNotIndex{\kern,\hskip,\hspace}
+% \DoNotIndex{\hbox,\vbox,\dp,\ht,\wd}
+% \DoNotIndex{\romannumeral,\alph,\Alph,\roman,\Roman}
+% \DoNotIndex{\savebox,\setbox,\usebox,\toks}
+% \DoNotIndex{\@tempdima,\@tempdimb,\@tempdimc}
+% \DoNotIndex{\DeclareDocumentCommand,\NewDocumentCommand,
+%             \ProvideDocumentCommand,\RenewDocumentCommand}
+% \DoNotIndex{\newcommand,\renewcommand,\providecommand}
+% \DoNotIndex{\IfNoValueTF,\IfNoValueT,\IfNoValueF}
+% \DoNotIndex{\CurrentOption,\DeclareOption,\ProcessOptions,\RequirePackage}
+% \DoNotIndex{\PackageError,\PackageWarning,\MessageBreak}
+% \DoNotIndex{\dimexpr,\numexpr}
+% \DoNotIndex{\empty,\@empty,\rule,\space,\@tempa,\@tempb,\@tempc,\x}
+%
+% \title{The \Package{listeq} package\thanks{This document corresponds to
+%   \Package{hmk}~\fileversion, dated \filedate.}}
+% \author{rapidcow\\\texttt{<thegentlecow@gmail.com>}}
+% \date{September 12, 2022}
+% \maketitle
+%
+% \noindent
+% \textbf{DISCLAIMER: I DID NOT WRITE THIS CODE!}  Credit goes to
+% \href{https://tex.stackexchange.com/a/9640}{Philippe Goutet} on \TeX{}
+% Stack Exchange.
+%
+% \tableofcontents
+%
+% \section{Usage}
+%
+% So let's say your math teacher assigned you to do some algebra problems.
+% And boy oh boy do you get constantly \emph{annoyed} how crappy the math
+% equations made in Word look:
+%
+% \begin{quote}
+%   \begin{enumerate}
+%     \def\hyphen{\hbox{-}}
+%     \item[4.] Evaluate
+%               {\obeylines
+%                $\displaystyle{\sin}75^\circ$
+%                \parskip 0.5\baselineskip
+%                $\displaystyle tan \frac{\pi}{12}$
+%                $\displaystyle\cos\mleft(\cos^{\hyphen1} \frac{1}{2}\mright)$
+%                $\displaystyle\sin^{\hyphen1}(\sin \frac{\pi}{7})$
+%                ^^A it's significantly harder to make random markup
+%                ^^A mistakes like this in LaTeX than in Word amirite u_u;
+%                \leavevmode \kern\itemindent \kern -1.29761ex \ldots}
+%   \end{enumerate}
+% \end{quote}
+% (Yes, this is just about how bad it looked.  It's ironic how I have to go
+% the extra mile to make things look \emph{bad} here in \LaTeX{} lol)
+%
+% Let's just say, if you got the chance to, you would want to write your
+% homework in something\ldots{} better-looking.  If you decide to just write
+% on paper then you've probably gone to the wrong place.  \emph{But}\ldots{}
+% if you decide to write with \LaTeX, well\ldots{} for starters you might
+% think of writing something like this.
+%
+% \begin{latexcode}
+% \documentclass{article}
+% \usepackage{amsmath}
+% \begin{document}
+% \begin{enumerate}
+%   % 3 lines \item omitted...
+%   \item % 4.
+%   \begin{enumerate}
+%     \item % (a)
+%       \begin{align*}
+%         ...
+%       \end{align*}
+%     \item % (b)
+%       \begin{align*}
+%         ...
+%       \end{align*}
+%   \end{enumerate}
+% \end{enumerate}
+% \end{document}
+% \end{latexcode}
+%
+% But what you get is, well... this:
+%
+% \newcommand{\foura}{%
+%   \sin \ang{75} &= \sin(\ang{30} + \ang{45})
+%       = \sin \ang{30} \cos \ang{45} + \cos \ang{30} \sin \ang{45} \\
+%     &= \biggl(\frac{1}{2}\biggr)\,\biggl(\frac{\sqrt{2}}{2}\biggr)
+%         + \biggl(\frac{\sqrt{3}}{2}\biggr)\,\biggl(\frac{\sqrt{2}}{2}\biggr)
+%       = \frac{\sqrt{2} + \sqrt{6}}{4}.
+% }
+% \newcommand{\fourb}{%
+%   \tan \frac{\pi}{12}
+%     &= \tan\mleft(\frac{4\pi}{12} - \frac{3\pi}{12}\mright)
+%       = \tan\mleft(\frac{\pi}{3} - \frac{\pi}{4}\mright)
+%       = \frac{\tan(\pi/3) - \tan(\pi/4)}{1 + \tan(\pi/3) \tan(\pi/4)} \\
+%     &= \frac{\sqrt{3} - 1}{1 + \sqrt{3} \cdot 1}
+%       = \frac{\sqrt{3} - 1}{1 + \sqrt{3}}
+%       = \frac{3 - \sqrt{3}}{\sqrt{3} + 3}
+%       = \frac{(\sqrt{3} - 1)\, (\sqrt{3} - 1)}
+%              {(\sqrt{3} + 1)\, (\sqrt{3} - 1)} \\
+%     &= \frac{4 - 2\sqrt{3}}{2} = 2 - \sqrt{3}.
+% }
+% \begin{quote}
+%   \begin{enumerate}
+%     \addtocounter{enumi}{3}
+%     \item
+%     \begin{enumerate}
+%       \item \begin{align*} \foura \end{align*}
+%       \item \begin{align*} \fourb \end{align*}
+%     \end{enumerate}
+%   \end{enumerate}
+% \end{quote}
+%
+% which doesn't look very nice...
+%
+% Well, one simple solution would be to use the inline version of these
+% environments (\Environ{aligned}, \Environ{gathered}) with the |[t]| option
+% and put \cs{hfill} around them, like this:
+%\begin{Verbatim}[gobble=1]
+%\hfill \begin{aligned}[t] ...
+%  \end{aligned}\hfill \null \par
+%\end{Verbatim}
+% But that means you'll lose the ability to split equations across pages;
+% that is, you want to keep using environments like align and gather, but
+% with some magical way of offsetting it the right amount...
+%
+% \DescribeEnv{listeq}
+% Well that's what this package does! Directly based on code contributed by
+% \href{https://tex.stackexchange.com/a/9640}{Philippe Goutet}, the
+% \Environ{listeq} environment takes the name of your equation environment
+% and adjusts it so that the baseline aligns.
+%
+% The above code can be replaced as follows:
+%
+% \begin{latexcode}
+% % XXX: i don't know if this does anything to remove the extra spaces O-O;
+% \makeatletter \def\nodisplayskip{%
+%   \abovedisplayskip\z@
+%   \abovedisplayshortskip\z@
+%   \belowdisplayshortskip\z@
+%   \belowdisplayshortskip\z@
+% }\makeatother
+% \begin{enumerate}
+%   % 3 \item lines omitted...
+%   \item
+%   \begin{enumerate}
+%     \item
+%       \begin{listeq}{align*}
+%         ...
+%       \end{listeq}
+%     \item % (b)
+%       \begin{listeq}{align*}
+%         ...
+%       \end{listeq}
+%   \end{enumerate}
+% \end{enumerate}
+% \end{latexcode}
+%
+% which produces this:
+%
+% \makeatletter
+% \def\nodisplayskip{%
+%   \abovedisplayskip\z@
+%   \abovedisplayshortskip\z@
+%   \belowdisplayshortskip\z@
+%   \belowdisplayshortskip\z@
+% }
+% \makeatother
+% \begin{quote}
+%   \begin{enumerate}
+%     \addtocounter{enumi}{3}
+%     \item
+%     \begin{enumerate}
+%       \nodisplayskip
+%       \item \begin{listeq}{align*} \foura \end{listeq}
+%       \item \begin{listeq}{align*} \fourb \end{listeq}
+%     \end{enumerate}
+%   \end{enumerate}
+% \end{quote}
+%
+% Just like how table of contents and indices need multiple passes, you'll
+% have to compile two, three, or even \emph{four} times to get the position
+% right!  And every time your document layout changes you'll need to
+% recompile about the same number of times to get things right.
+%
+% Also keep in mind this only works if placed directly after \cs{item}.
+% If you place it anywhere else, well\ldots{} let's just say, I don't know.
+%
+% \StopEventually{}
+% \clearpage
+% \section{Implementation}
+%    \begin{macrocode}
+%<*package>
+\ProvidesFile{listeq.sty}[2021/04/22 v0.1 Display equation in lists]
+\RequirePackage{amsmath}
+\RequirePackage[savepos]{zref}
+
+%% This ingenious solution comes directly from Philippe Goutet on
+%% TeX Stack Exchange: https://tex.stackexchange.com/a/9640
+
+\newcounter{le@count}
+\setcounter{le@count}{0}
+%% The name of the position before the start of equation, which will be
+%% passed to \zsaveref and \zposy and such commands.
+\def\le@top{le@pos@top@\number\value{le@count}}
+%% Similar to \le@bottom but right after the start of equation.
+\def\le@bottom{le@pos@bottom@\number\value{le@count}}
+%% The macro name that stores vertical space to shift the equation by, as
+%% recorded in the aux file.  For it to be used as a control sequence,
+%% \csname ... \endcsname has to be inserted around it.
+\def\le@vspacename{le@vspacevalue\romannumeral\value{le@count}}
+
+\def\le@markitemstart{%
+  \stepcounter{le@count}%
+  %% \le@vspacename is kinda like the "final" determined vertical space.
+  %% It is only defined when we know that the top position (before start
+  %% of equation) and bottom position (after the start of equation) coincide.
+  \@ifundefined{\le@vspacename}%
+    %% Let \le@vspace@value 0pt so that later on the \vspace* would have
+    %% no effects, and later the saved top and bottom positions will accurately
+    %% be the length between the text and display equation.
+    {\edef\le@vspace@value{\z@}}%
+    %% Since \le@vspacename is defined, we will set \le@vspace@value equal
+    %% to it.
+    {\edef\le@vspace@value{\csname \le@vspacename \endcsname}}
+  %% When the top and bottom position coincide, there are two possible cases.
+  \ifnum\zposy{\le@bottom}=\zposy{\le@top}
+    \@ifundefined{\le@vspacename}%
+      %% \le@vspace is not even defined... so why are these two equal?
+      %% Well... on the first run, \zposy returns 0 for a name it's never saved,
+      %% so that should be the case.
+      {%
+        %% Advance the imperfect alignment counter, globally.
+        \xdef\le@badcount{\the\numexpr\le@badcount+1\relax}%
+      }%
+      %% I'm not sure what this does... it just writes the same thing back
+      %% to the aux file, the same definition of \le@vspacename back.
+      %% Maybe it's just to be sure that, "Yes, this works, so we write it
+      %% in the aux file."
+      {\immediate\write\@mainaux{%
+        \gdef\expandafter\noexpand\csname \le@vspacename\endcsname
+          {\csname \le@vspacename \endcsname}
+        }%
+      }%
+  \else
+    %% If they don't coincide, we need to do some adjustments...
+    %% First, if the length from bottom to top (it's a negative length indeed
+    %% since zsavepos saves position measured from the bottom of the page)
+    %% is equal to \le@vspace@value, then...
+    \ifdim\dimexpr\zposy{\le@bottom}sp-\zposy{\le@top}sp\relax=\le@vspace@value
+      %% ... it means that we have the correct length, so we can get the
+      %% alignment right on this run.
+    \else
+      %% The space \le@vspace@value doesn't work anymore, so set it to 0pt
+      %% first... (Again, just so that the following \vspace* commands don't
+      %% produce space and that we can save accurate positions.)
+      \edef\le@vspace@value{\z@}%
+      %% Advance the imperfect alignment counter, globally.
+      \xdef\le@badcount{\the\numexpr\le@badcount+1\relax}%
+    \fi
+    %% Either way, we somehow have to write to the aux file about the
+    %% vertical space?
+    \immediate\write\@mainaux{%
+      \gdef\expandafter\noexpand\csname \le@vspacename\endcsname
+        {\the\dimexpr\zposy{\le@bottom}sp-\zposy{\le@top}sp\relax}}%
+  \fi
+  %% Recall that \le@vspacename is a negative space... so this is a positive
+  %% space that would nudge the text down.
+  \vspace*{-\le@vspace@value}%
+  %% They said \leavevmode is like starting a new paragraph, so
+  %% i guess...
+  \leavevmode
+  %% The position is right after the length has been nudged.
+  \zsavepos{\le@top}%
+  %% I don't know how the internal works... but as i've tested this, this
+  %% space pushes the equation up (since \le@vspacename is a negative space)
+  \vspace*{\le@vspace@value}%
+}
+\def\le@markdisplaystart{\zsavepos{\le@bottom}}
+\AtBeginDocument{\gdef\le@badcount{0}}
+\AtEndDocument{%
+  \ifnum\le@badcount=0\else
+    \PackageWarningNoLine{listeq}
+     {\le@badcount\space imperfect alignment(s).
+      Rerun LaTeX to get them right}%
+  \fi
+}
+
+%% Originally an adaptation of https://tex.stackexchange.com/a/312131,
+%% but now...
+\DeclareDocumentEnvironment{listeq}{ m }
+  {%
+    \gdef\le@environ{#1}%
+    \le@markitemstart
+    \@nameuse{\le@environ}%
+    \le@markdisplaystart
+  }{%
+    \@nameuse{end\le@environ}%
+    \ignorespacesafterend
+  }
+
+%% The same as listeq but with extra arguments appended to the environment
+\DeclareDocumentEnvironment{listeq*}{ m m }
+  {%
+    \gdef\le@environ{#1}%
+    \le@markitemstart
+    \@nameuse{\le@environ}#2\relax
+    \le@markdisplaystart
+  }{\endlisteq}
+
+\endinput
+%    \end{macrocode}
+%
+% \section{Old quirky version}
+%
+% An adaptation of \url{https://tex.stackexchange.com/a/312131}
+%
+%    \begin{macrocode}
+\DeclareDocumentEnvironment{listequation}{ s }
+  {%
+    \setlength{\abovedisplayskip}{0pt}%
+    \setlength{\abovedisplayshortskip}{0pt}%
+    \vspace{\baselineskip}\leavevmode\vspace*{-\baselineskip}%
+    \IfBooleanTF{#1}%
+      {\csname equation*\endcsname}{\equation}%
+  }
+  {\endequation \ignorespacesafterend}
+\DeclareDocumentEnvironment{listalign}{ s }
+  {%
+    \setlength{\abovedisplayskip}{0pt}%
+    \setlength{\abovedisplayshortskip}{0pt}%
+    \leavevmode\vspace*{-\baselineskip}%
+    \IfBooleanTF{#1}%
+      {\csname align*\endcsname}{\align}%
+  }
+  {\endalign \ignorespacesafterend}
+\DeclareDocumentEnvironment{listgather}{ s }
+  {%
+    \setlength{\abovedisplayskip}{0pt}%
+    \setlength{\abovedisplayshortskip}{0pt}%
+    \leavevmode\vspace*{-\baselineskip}%
+    \IfBooleanTF{#1}%
+      {\csname gather*\endcsname}{\gather}%
+  }
+  {\endgather \ignorespacesafterend}
+\DeclareDocumentEnvironment{listalignat}{ s }
+  {%
+    \setlength{\abovedisplayskip}{0pt}%
+    \setlength{\abovedisplayshortskip}{0pt}%
+    \leavevmode\vspace*{-\baselineskip}%
+    \IfBooleanTF{#1}%
+      {\csname alignat*\endcsname}{\alignat}%
+  }
+  {\endalignat \ignorespacesafterend}
+
+\expandafter\def\csname listequation*\endcsname{\listequation*}
+\expandafter\def\csname endlistequation*\endcsname{\endlistequation}
+\expandafter\def\csname listalign*\endcsname{\listalign*}
+\expandafter\def\csname endlistalign*\endcsname{\endlistalign}
+\expandafter\def\csname listgather*\endcsname{\listgather*}
+\expandafter\def\csname endlistgather*\endcsname{\endlistgather}
+\expandafter\def\csname listalignat*\endcsname{\listalignat*}
+\expandafter\def\csname endlistalignat*\endcsname{\endlistalignat}
+%</package>
+%    \end{macrocode}
